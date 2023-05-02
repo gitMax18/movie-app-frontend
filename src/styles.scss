@@ -1,8 +1,28 @@
-// colors variables
-$color-primary : #F33F3F;
-$color-primary-darken : #A41B1B;
-$color-dark : #000;
-$color-dark-lighter : #363636;
-$color-grey : #565656;
-$color-grey-lighter : #D9D9D9;
-$color-light : #FFFFFF;
+:root {
+  // define variables
+  --color-primary: #F33F3F;
+  --color-primary-darken: #A41B1B;
+  --color-dark: #000;
+  --color-dark-lighter: #363636;
+  --color-grey: #565656;
+  --color-grey-lighter: #D9D9D9;
+  --color-light: #FFFFFF;
+
+  // radius
+  --main-radius: 1rem;
+
+  // change font size for rem
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+}
+
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
