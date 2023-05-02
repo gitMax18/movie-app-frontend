@@ -1,4 +1,6 @@
-import { ContentType } from './../types';
+import { Observable } from 'rxjs';
+import { CategoryService } from '../service/category.service';
+import { Category, ContentType } from './../types';
 import { Component } from '@angular/core';
 
 @Component({
@@ -22,6 +24,11 @@ import { Component } from '@angular/core';
             </option>
           </select>
         </div>
+      </div>
+      <div class="form__field" *ngIf="categories$ | async as categories">
+        <app-select-categories
+          [categories]="categories"
+        ></app-select-categories>
       </div>
       <div class="form__field">
         <label class="form__label" for="shortResume">Short resume</label>
@@ -76,4 +83,12 @@ import { Component } from '@angular/core';
 })
 export class ContentFormComponent {
   contentType = Object.values(ContentType);
+
+  categories$?: Observable<Category[]>;
+
+  constructor(private categoryService: CategoryService) {}
+
+  ngOnInit() {
+    this.categories$ = this.categoryService.getAllCategories();
+  }
 }

@@ -12,6 +12,7 @@ import { AddContentComponent } from './pages/add-content.component';
 import { ContentFormComponent } from './component/content-form.component';
 import { PageTitleComponent } from './component/page-title.component';
 import { ButtonComponent } from './component/button.component';
+import { SelectCategoriesComponent } from './component/select-categories.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ButtonComponent } from './component/button.component';
     AddContentComponent,
     ContentFormComponent,
     PageTitleComponent,
-    ButtonComponent
+    ButtonComponent,
+    SelectCategoriesComponent
   ],
   imports: [
     BrowserModule,
