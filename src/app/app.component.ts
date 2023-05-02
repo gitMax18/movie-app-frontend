@@ -15,11 +15,13 @@ import { Component } from '@angular/core';
     width : 100%;
    display : flex;
    &__navbar{
-    width : 20%;
-        max-width : 26rem;
-      min-width : 20rem;
+    position : fixed;
+    right : 0;
+    left : 0;
+    width : 25rem;
    }
     &__page{
+      margin-left : 25rem;
       width : 100%;
       flex-grow : 1;
     }
