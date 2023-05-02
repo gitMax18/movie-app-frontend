@@ -8,6 +8,10 @@ import { NavlinkComponent } from './component/navlink.component';
 import { HomeComponent } from './pages/home.component';
 import { MovieDetailComponent } from './pages/movie-detail.component';
 import { ContentCardComponent } from './component/content-card.component';
+import { AddContentComponent } from './pages/add-content.component';
+import { ContentFormComponent } from './component/content-form.component';
+import { PageTitleComponent } from './component/page-title.component';
+import { ButtonComponent } from './component/button.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +20,11 @@ import { ContentCardComponent } from './component/content-card.component';
     NavlinkComponent,
     HomeComponent,
     MovieDetailComponent,
-    ContentCardComponent
+    ContentCardComponent,
+    AddContentComponent,
+    ContentFormComponent,
+    PageTitleComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,

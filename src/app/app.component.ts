@@ -22,6 +22,9 @@ import { Component } from '@angular/core';
    }
     &__page{
       margin-left : 25rem;
+      padding : 2rem;
+      background-color : var(--color-dark-lighter);
+      min-height : 100vh;
       width : 100%;
       flex-grow : 1;
     }
