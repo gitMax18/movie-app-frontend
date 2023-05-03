@@ -69,7 +69,7 @@ export class SelectCategoriesComponent implements ControlValueAccessor {
     } else {
       this.selectedCategories.splice(index, 1);
     }
-    this.onchange(categoryId);
+    this.onchange(this.selectedCategories);
     this.onTouch();
   }
 
