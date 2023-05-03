@@ -14,6 +14,7 @@ import { PageTitleComponent } from './component/page-title.component';
 import { ButtonComponent } from './component/button.component';
 import { SelectCategoriesComponent } from './component/select-categories.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CategoryBadgeComponent } from './component/category-badge.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     PageTitleComponent,
     ButtonComponent,
     SelectCategoriesComponent,
+    CategoryBadgeComponent,
   ],
   imports: [
     BrowserModule,
