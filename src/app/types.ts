@@ -7,8 +7,12 @@ export type ApiResponse<T> = {
 
 export type ApiContent = {
   id: number;
-  title: string;
   categories: Category[];
+} & ContentData;
+
+export type ContentData = {
+  title: string;
+  categories: number[];
   releaseYear: number;
   resume: string;
   shortResume: string;

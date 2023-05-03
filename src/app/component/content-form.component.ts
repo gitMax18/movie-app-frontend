@@ -1,8 +1,10 @@
 import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
-import { Category, ContentType } from './../types';
+import { Category, ContentData, ContentType } from './../types';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ContentService } from '../service/content.service';
+import { CustomValidators } from '../utils/customValidators';
 
 @Component({
   selector: 'app-content-form',
@@ -10,6 +12,12 @@ import { FormControl, FormGroup } from '@angular/forms';
     <form class="form" (submit)="handleSubmit()" [formGroup]="contentForm">
       <div class="form__field">
         <label class="form__label" for="title">Title</label>
+        <p
+          class="form__error"
+          *ngIf="contentForm.controls.title.invalid && isInvalidForm"
+        >
+          Title is required
+        </p>
         <input
           formControlName="title"
           class="form__input"
@@ -20,6 +28,12 @@ import { FormControl, FormGroup } from '@angular/forms';
       <div class="form__fields">
         <div class="form__field">
           <label class="form__label" for="releaseYear">Release year</label>
+          <p
+            class="form__error"
+            *ngIf="contentForm.controls.releaseYear.invalid && isInvalidForm"
+          >
+            Add number between 1901 and 2155
+          </p>
           <input
             formControlName="releaseYear"
             class="form__input"
@@ -29,6 +43,12 @@ import { FormControl, FormGroup } from '@angular/forms';
         </div>
         <div class="form__field">
           <label class="form__label" for="type">Type</label>
+          <p
+            class="form__error"
+            *ngIf="contentForm.controls.type.invalid && isInvalidForm"
+          >
+            Type is required
+          </p>
           <select
             formControlName="type"
             class="form__input"
@@ -61,6 +81,12 @@ import { FormControl, FormGroup } from '@angular/forms';
       </div>
       <div class="form__field">
         <label class="form__label" for="resume">Resume</label>
+        <p
+          class="form__error"
+          *ngIf="contentForm.controls.resume.invalid && isInvalidForm"
+        >
+          Add number between 1901 and 2155
+        </p>
         <textarea
           formControlName="resume"
           class="form__textarea"
@@ -80,7 +106,7 @@ import { FormControl, FormGroup } from '@angular/forms';
         &__fields {
           display: flex;
           justify-content: space-between;
-          align-item: center;
+          align-items: center;
           gap: 2rem;
         }
         &__field {
@@ -108,6 +134,9 @@ import { FormControl, FormGroup } from '@angular/forms';
           height: 15rem;
           font-size: 1.8rem;
         }
+        &__error {
+          color: var(--color-primary);
+        }
         &__btn {
           width: 50%;
           margin: 0 auto;
@@ -120,24 +149,39 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class ContentFormComponent {
   contentType = Object.values(ContentType);
 
+  isInvalidForm = false;
+
   categories$?: Observable<Category[]>;
 
   contentForm = new FormGroup({
-    title: new FormControl(''),
-    releaseYear: new FormControl(''),
-    type: new FormControl(''),
-    categories: new FormControl([]),
-    shortResume: new FormControl(''),
-    resume: new FormControl(''),
+    title: new FormControl<string>('', [Validators.required]),
+    releaseYear: new FormControl<number | null>(null, [
+      Validators.required,
+      CustomValidators.invalidNumberValue(),
+    ]),
+    type: new FormControl<string>('', [Validators.required]),
+    categories: new FormControl<number[]>([]),
+    shortResume: new FormControl<string>(''),
+    resume: new FormControl<string>('', [Validators.required]),
   });
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    private contentService: ContentService
+  ) {}
 
   ngOnInit() {
     this.categories$ = this.categoryService.getAllCategories();
   }
 
   handleSubmit() {
-    console.log(this.contentForm.value);
+    if (this.contentForm.invalid) {
+      this.isInvalidForm = true;
+      return;
+    }
+    this.isInvalidForm = false;
+    this.contentService
+      .createContent(this.contentForm.value as ContentData)
+      .subscribe((response) => console.log(response));
   }
 }
