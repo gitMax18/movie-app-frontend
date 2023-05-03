@@ -8,7 +8,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     <div class="categories" *ngIf="categories">
       <div
         class="categories__item"
-        [class.selected]="isSelected(category.id)"
+        [class.categories__item--selected]="isSelected(category.id)"
         (click)="handleCategory(category.id)"
         *ngFor="let category of categories"
       >
@@ -30,10 +30,16 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
           cursor: pointer;
           color: var(--color-light);
           border-radius: var(--main-radius);
+          &:hover {
+            background-color: var(--color-grey-darken);
+          }
+          &--selected {
+            background-color: var(--color-primary);
+            &:hover {
+              background-color: var(--color-primary);
+            }
+          }
         }
-      }
-      .selected {
-        background-color: var(--color-primary);
       }
     `,
   ],
