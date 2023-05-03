@@ -94,7 +94,7 @@ import { CustomValidators } from '../utils/customValidators';
         ></textarea>
       </div>
       <div class="form__btn">
-        <app-button type="submit">Submit</app-button>
+        <app-button [type]="'submit'">Submit</app-button>
       </div>
     </form>
   `,

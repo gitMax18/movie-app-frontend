@@ -28,6 +28,14 @@ import { ApiContent } from '../types';
           >Type : {{ content.type.toLowerCase() }}</span
         >
         <p class="content__resume">{{ content.resume }}</p>
+        <div class="content__action">Actions</div>
+        <hr class="content__action--row" />
+        <div class="content__actions">
+          <app-button (onClick)="handleDelete()" [style]="'danger'"
+            >Delete</app-button
+          >
+          <app-button [style]="'success'">Update</app-button>
+        </div>
       </div>
     </div>
     <div class="error" *ngIf="err$ | async as err">{{ err }}</div>
@@ -63,7 +71,19 @@ import { ApiContent } from '../types';
         }
         &__resume {
           color: var(--color-light);
-          margin-top: 1.5rem;
+          margin: 1.5rem 0;
+        }
+        &__action {
+          color: var(--color-primary);
+          &--row {
+            border: 1px solid var(--color-primary);
+            margin-bottom: 1.5rem;
+          }
+        }
+        &__actions {
+          display: grid;
+          grid-template-columns: 1fr 3fr;
+          gap: 1rem;
         }
       }
     `,
@@ -93,5 +113,9 @@ export class MovieDetailComponent {
         return of(null);
       })
     );
+  }
+
+  handleDelete() {
+    console.log('delete');
   }
 }
