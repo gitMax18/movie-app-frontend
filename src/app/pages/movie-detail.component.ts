@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '../service/content.service';
 import { switchMap, Observable, of, catchError, throwError } from 'rxjs';
 import { ApiContent } from '../types';
@@ -31,7 +31,7 @@ import { ApiContent } from '../types';
         <div class="content__action">Actions</div>
         <hr class="content__action--row" />
         <div class="content__actions">
-          <app-button (onClick)="handleDelete()" [style]="'danger'"
+          <app-button (onClick)="handleDelete(content.id)" [style]="'danger'"
             >Delete</app-button
           >
           <app-button [style]="'success'">Update</app-button>
@@ -95,7 +95,8 @@ export class MovieDetailComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private contentService: ContentService
+    private contentService: ContentService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -115,7 +116,9 @@ export class MovieDetailComponent {
     );
   }
 
-  handleDelete() {
-    console.log('delete');
+  handleDelete(id: number) {
+    this.contentService.deleteContentById(id).subscribe(() => {
+      this.router.navigateByUrl('/');
+    });
   }
 }

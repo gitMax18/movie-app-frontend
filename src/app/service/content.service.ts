@@ -30,6 +30,10 @@ export class ContentService {
     return this.http.post<ContentData>(this.contentUrl, newContent);
   }
 
+  deleteContentById(contentId: number) {
+    return this.http.delete(this.contentUrl + `/${contentId}`);
+  }
+
   private handleError(error: HttpErrorResponse) {
     let message: string;
     if (error.status === 0) {
