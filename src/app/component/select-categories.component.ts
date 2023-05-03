@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Category } from '../types';
-import { ControlValueAccessor } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-select-categories',
@@ -36,6 +36,13 @@ import { ControlValueAccessor } from '@angular/forms';
         background-color: var(--color-primary);
       }
     `,
+  ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: SelectCategoriesComponent,
+      multi: true,
+    },
   ],
 })
 export class SelectCategoriesComponent implements ControlValueAccessor {
