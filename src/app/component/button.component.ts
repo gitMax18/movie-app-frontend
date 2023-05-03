@@ -1,9 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-button',
   template: `
-    <button [type]="type" class="button">
+    <button
+      [class.button__primary]="style === 'primary'"
+      [class.button__danger]="style === 'danger'"
+      [class.button__success]="style === 'success'"
+      (click)="handleClick()"
+      [type]="type"
+      class="button"
+    >
       <ng-content></ng-content>
     </button>
   `,
@@ -18,10 +25,15 @@ import { Component, Input } from '@angular/core';
         border: none;
         border-radius: var(--main-radius);
         color: var(--color-light);
-        background-color: var(--color-primary);
         cursor: pointer;
-        &:hover {
-          background-color: var(--color-primary-darken);
+        &__primary {
+          background-color: var(--color-primary);
+        }
+        &__danger {
+          background-color: var(--color-danger);
+        }
+        &__success {
+          background-color: var(--color-success);
         }
       }
     `,
@@ -29,4 +41,14 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() type: 'button' | 'submit' = 'button';
+  @Input() style: 'primary' | 'danger' | 'success' = 'primary';
+  @Output() onClick = new EventEmitter();
+
+  ngOnInit() {
+    console.log(this.type);
+  }
+
+  handleClick() {
+    this.onClick.emit();
+  }
 }
