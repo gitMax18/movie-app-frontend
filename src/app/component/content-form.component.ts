@@ -42,6 +42,9 @@ import { FormControl, FormGroup } from '@angular/forms';
         </div>
       </div>
       <div class="form__field" *ngIf="categories$ | async as categories">
+        <label class="form__label form__label--margin" for="categories"
+          >Select categories</label
+        >
         <app-select-categories
           formControlName="categories"
           [categories]="categories"
@@ -85,8 +88,12 @@ import { FormControl, FormGroup } from '@angular/forms';
           width: 100%;
         }
         &__label {
+          display: block;
           color: var(--color-light);
           font-size: 1.8rem;
+          &--margin {
+            margin-bottom: 0.5rem;
+          }
         }
         &__input {
           display: block;
