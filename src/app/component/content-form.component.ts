@@ -2,23 +2,39 @@ import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 import { Category, ContentType } from './../types';
 import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-content-form',
   template: `
-    <form class="form">
+    <form class="form" (submit)="handleSubmit()" [formGroup]="contentForm">
       <div class="form__field">
         <label class="form__label" for="title">Title</label>
-        <input class="form__input" type="text" id="title" />
+        <input
+          formControlName="title"
+          class="form__input"
+          type="text"
+          id="title"
+        />
       </div>
       <div class="form__fields">
         <div class="form__field">
           <label class="form__label" for="releaseYear">Release year</label>
-          <input class="form__input" type="number" id="releaseYear" />
+          <input
+            formControlName="releaseYear"
+            class="form__input"
+            type="number"
+            id="releaseYear"
+          />
         </div>
         <div class="form__field">
           <label class="form__label" for="type">Type</label>
-          <select class="form__input" name="type" id="type">
+          <select
+            formControlName="type"
+            class="form__input"
+            name="type"
+            id="type"
+          >
             <option *ngFor="let type of contentType" [value]="type">
               {{ type }}
             </option>
@@ -27,16 +43,26 @@ import { Component } from '@angular/core';
       </div>
       <div class="form__field" *ngIf="categories$ | async as categories">
         <app-select-categories
+          formControlName="categories"
           [categories]="categories"
         ></app-select-categories>
       </div>
       <div class="form__field">
         <label class="form__label" for="shortResume">Short resume</label>
-        <input class="form__input" type="text" id="shortResume" />
+        <input
+          formControlName="shortResume"
+          class="form__input"
+          type="text"
+          id="shortResume"
+        />
       </div>
       <div class="form__field">
         <label class="form__label" for="resume">Resume</label>
-        <textarea class="form__textarea" id="resume"></textarea>
+        <textarea
+          formControlName="resume"
+          class="form__textarea"
+          id="resume"
+        ></textarea>
       </div>
       <div class="form__btn">
         <app-button type="submit">Submit</app-button>
@@ -60,17 +86,20 @@ import { Component } from '@angular/core';
         }
         &__label {
           color: var(--color-light);
+          font-size: 1.8rem;
         }
         &__input {
           display: block;
           width: 100%;
           padding: 0.5rem;
+          font-size: 1.8rem;
         }
         &__textarea {
           display: block;
           width: 100%;
           padding: 0.5rem;
           height: 15rem;
+          font-size: 1.8rem;
         }
         &__btn {
           width: 50%;
@@ -86,9 +115,22 @@ export class ContentFormComponent {
 
   categories$?: Observable<Category[]>;
 
+  contentForm = new FormGroup({
+    title: new FormControl(''),
+    releaseYear: new FormControl(''),
+    type: new FormControl(''),
+    categories: new FormControl([]),
+    shortResume: new FormControl(''),
+    resume: new FormControl(''),
+  });
+
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit() {
     this.categories$ = this.categoryService.getAllCategories();
+  }
+
+  handleSubmit() {
+    console.log(this.contentForm.value);
   }
 }

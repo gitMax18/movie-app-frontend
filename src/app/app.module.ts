@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from "@angular/common/http"
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './layout/navbar.component';
@@ -13,6 +13,7 @@ import { ContentFormComponent } from './component/content-form.component';
 import { PageTitleComponent } from './component/page-title.component';
 import { ButtonComponent } from './component/button.component';
 import { SelectCategoriesComponent } from './component/select-categories.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,14 +27,15 @@ import { SelectCategoriesComponent } from './component/select-categories.compone
     ContentFormComponent,
     PageTitleComponent,
     ButtonComponent,
-    SelectCategoriesComponent
+    SelectCategoriesComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
