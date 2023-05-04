@@ -34,7 +34,11 @@ import { ApiContent } from '../types';
           <app-button (onClick)="handleDelete(content.id)" [style]="'danger'"
             >Delete</app-button
           >
-          <app-button [style]="'success'">Update</app-button>
+          <app-button
+            (onClick)="handleClickUpdate(content.id)"
+            [style]="'success'"
+            >Update</app-button
+          >
         </div>
       </div>
     </div>
@@ -47,7 +51,6 @@ import { ApiContent } from '../types';
       }
       .content {
         display: flex;
-        justify-content: space-between;
         gap: 1rem;
         &__img {
           width: 50%;
@@ -120,5 +123,9 @@ export class MovieDetailComponent {
     this.contentService.deleteContentById(id).subscribe(() => {
       this.router.navigateByUrl('/');
     });
+  }
+
+  handleClickUpdate(id: number) {
+    this.router.navigateByUrl('/content/update/' + id);
   }
 }

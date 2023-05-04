@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs';
 import { CategoryService } from '../service/category.service';
-import { Category, ContentData, ContentType } from './../types';
-import { Component } from '@angular/core';
+import { ApiContent, Category, ContentData, ContentType } from './../types';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ContentService } from '../service/content.service';
 import { CustomValidators } from '../utils/customValidators';
 
 @Component({
@@ -102,7 +101,6 @@ import { CustomValidators } from '../utils/customValidators';
     `
       .form {
         width: 100%;
-
         &__fields {
           display: flex;
           justify-content: space-between;
@@ -147,6 +145,8 @@ import { CustomValidators } from '../utils/customValidators';
   ],
 })
 export class ContentFormComponent {
+  @Input() content: ApiContent | null = null;
+  @Output() onSubmit = new EventEmitter<ContentData>();
   contentType = Object.values(ContentType);
 
   isInvalidForm = false;
@@ -165,13 +165,21 @@ export class ContentFormComponent {
     resume: new FormControl<string>('', [Validators.required]),
   });
 
-  constructor(
-    private categoryService: CategoryService,
-    private contentService: ContentService
-  ) {}
+  constructor(private categoryService: CategoryService) {}
 
   ngOnInit() {
     this.categories$ = this.categoryService.getAllCategories();
+
+    if (this.content) {
+      this.contentForm.patchValue({
+        title: this.content.title,
+        releaseYear: this.content.releaseYear,
+        type: this.content.type,
+        categories: this.content.categories.map((c) => c.id),
+        shortResume: this.content.shortResume || '',
+        resume: this.content.resume,
+      });
+    }
   }
 
   handleSubmit() {
@@ -180,8 +188,6 @@ export class ContentFormComponent {
       return;
     }
     this.isInvalidForm = false;
-    this.contentService
-      .createContent(this.contentForm.value as ContentData)
-      .subscribe((response) => console.log(response));
+    this.onSubmit.emit(this.contentForm.value as ContentData);
   }
 }

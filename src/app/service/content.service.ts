@@ -34,6 +34,10 @@ export class ContentService {
     return this.http.delete(this.contentUrl + `/${contentId}`);
   }
 
+  updateContent(id: number, content: ContentData) {
+    return this.http.put(this.contentUrl + `/${id}`, content);
+  }
+
   private handleError(error: HttpErrorResponse) {
     let message: string;
     if (error.status === 0) {
