@@ -14,7 +14,9 @@ import { Router } from '@angular/router';
         />
         <div class="card__infos">
           <div class="card__title">{{ content.title }}</div>
-          <p class="card_shortResume">{{ content.shortResume }}</p>
+          <p class="card_shortResume">
+            {{ content.shortResume || 'No short resume availabled' }}
+          </p>
         </div>
       </div>
     </div>

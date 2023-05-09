@@ -1,13 +1,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiContent, ApiResponse, ContentData } from '../types';
-import { catchError, map, throwError } from 'rxjs';
+import { Subject, catchError, map, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContentService {
   private readonly contentUrl = 'http://localhost:8080/api/contents';
+  errorObject$ = new Subject<{ [key: string]: string }>();
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +28,9 @@ export class ContentService {
   }
 
   createContent(newContent: ContentData) {
-    return this.http.post<ContentData>(this.contentUrl, newContent);
+    return this.http
+      .post<ContentData>(this.contentUrl, newContent)
+      .pipe(catchError(this.handleError.bind(this)));
   }
 
   deleteContentById(contentId: number) {
@@ -35,16 +38,19 @@ export class ContentService {
   }
 
   updateContent(id: number, content: ContentData) {
-    return this.http.put(this.contentUrl + `/${id}`, content);
+    return this.http
+      .put(this.contentUrl + `/${id}`, content)
+      .pipe(catchError(this.handleError.bind(this)));
   }
 
   private handleError(error: HttpErrorResponse) {
-    let message: string;
+    let err: { [key: string]: string } = {};
     if (error.status === 0) {
-      message = 'A client or network error occurred';
+      err['global'] = 'Error occured';
     } else {
-      message = error.error.message;
+      err = error.error.details;
     }
-    return throwError(() => new Error(message));
+    this.errorObject$.next(err);
+    return throwError(() => error.message);
   }
 }

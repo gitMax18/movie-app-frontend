@@ -4,16 +4,21 @@ import { ApiContent, Category, ContentData, ContentType } from './../types';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../utils/customValidators';
+import { ContentService } from '../service/content.service';
 
 @Component({
   selector: 'app-content-form',
   template: `
     <form class="form" (submit)="handleSubmit()" [formGroup]="contentForm">
+      <p class="form__error" *ngIf="error['global']">{{ error['global'] }}</p>
       <div class="form__field">
         <label class="form__label" for="title">Title</label>
         <p
           class="form__error"
-          *ngIf="contentForm.controls.title.invalid && isInvalidForm"
+          *ngIf="
+            (contentForm.controls.title.invalid && isInvalidForm) ||
+            error['title']
+          "
         >
           Title is required
         </p>
@@ -29,7 +34,10 @@ import { CustomValidators } from '../utils/customValidators';
           <label class="form__label" for="releaseYear">Release year</label>
           <p
             class="form__error"
-            *ngIf="contentForm.controls.releaseYear.invalid && isInvalidForm"
+            *ngIf="
+              (contentForm.controls.releaseYear.invalid && isInvalidForm) ||
+              error['releaseYear']
+            "
           >
             Add number between 1901 and 2155
           </p>
@@ -44,7 +52,10 @@ import { CustomValidators } from '../utils/customValidators';
           <label class="form__label" for="type">Type</label>
           <p
             class="form__error"
-            *ngIf="contentForm.controls.type.invalid && isInvalidForm"
+            *ngIf="
+              (contentForm.controls.type.invalid && isInvalidForm) ||
+              error['type']
+            "
           >
             Type is required
           </p>
@@ -82,9 +93,12 @@ import { CustomValidators } from '../utils/customValidators';
         <label class="form__label" for="resume">Resume</label>
         <p
           class="form__error"
-          *ngIf="contentForm.controls.resume.invalid && isInvalidForm"
+          *ngIf="
+            (contentForm.controls.resume.invalid && isInvalidForm) ||
+            error['resume']
+          "
         >
-          Add number between 1901 and 2155
+          resume is required
         </p>
         <textarea
           formControlName="resume"
@@ -147,6 +161,8 @@ import { CustomValidators } from '../utils/customValidators';
 export class ContentFormComponent {
   @Input() content: ApiContent | null = null;
   @Output() onSubmit = new EventEmitter<ContentData>();
+  error: Record<string, string> = {};
+
   contentType = Object.values(ContentType);
 
   isInvalidForm = false;
@@ -165,11 +181,21 @@ export class ContentFormComponent {
     resume: new FormControl<string>('', [Validators.required]),
   });
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    private contentService: ContentService
+  ) {}
 
   ngOnInit() {
+    // get category for display on form
     this.categories$ = this.categoryService.getAllCategories();
 
+    // get error when submit form
+    this.contentService.errorObject$.subscribe({
+      next: (err) => (this.error = err),
+    });
+
+    // if update get content data
     if (this.content) {
       this.contentForm.patchValue({
         title: this.content.title,

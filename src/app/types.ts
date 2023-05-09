@@ -5,6 +5,17 @@ export type ApiResponse<T> = {
   timestamp: number;
 };
 
+export type ApiError = {
+  statusCode: number;
+  message: string;
+  timestamp: number;
+  details?: [
+    {
+      [key: string]: string;
+    }
+  ];
+};
+
 export type ApiContent = {
   id: number;
   title: string;

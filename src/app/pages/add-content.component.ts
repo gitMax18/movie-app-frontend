@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ContentService } from '../service/content.service';
-import { ContentData } from '../types';
+import { ApiError, ContentData } from '../types';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-content',
@@ -20,11 +22,11 @@ import { ContentData } from '../types';
   ],
 })
 export class AddContentComponent {
-  constructor(private contentService: ContentService) {}
+  constructor(private contentService: ContentService, private router: Router) {}
 
   handleSubmit(contentData: ContentData) {
     this.contentService
       .createContent(contentData)
-      .subscribe((response) => console.log(response));
+      .subscribe(() => this.router.navigateByUrl(''));
   }
 }
