@@ -8,7 +8,8 @@ import { Subject, catchError, map, throwError } from 'rxjs';
 })
 export class ContentService {
   private readonly contentUrl = 'http://localhost:8080/api/contents';
-  errorObject$ = new Subject<{ [key: string]: string }>();
+  private errorObject$ = new Subject<{ [key: string]: string }>();
+  httpError$ = this.errorObject$.asObservable();
 
   constructor(private http: HttpClient) {}
 

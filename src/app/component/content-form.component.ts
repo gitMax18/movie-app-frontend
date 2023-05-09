@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 import { ApiContent, Category, ContentData, ContentType } from './../types';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
@@ -15,12 +15,12 @@ import { ContentService } from '../service/content.service';
         <label class="form__label" for="title">Title</label>
         <p
           class="form__error"
-          *ngIf="
-            (contentForm.controls.title.invalid && isInvalidForm) ||
-            error['title']
-          "
+          *ngIf="contentForm.controls.title.invalid && isInvalidForm"
         >
           Title is required
+        </p>
+        <p class="form__error" *ngIf="error['title']">
+          {{ error['title'] }}
         </p>
         <input
           formControlName="title"
@@ -162,6 +162,7 @@ export class ContentFormComponent {
   @Input() content: ApiContent | null = null;
   @Output() onSubmit = new EventEmitter<ContentData>();
   error: Record<string, string> = {};
+  errorSubscribtion?: Subscription;
 
   contentType = Object.values(ContentType);
 
@@ -191,7 +192,7 @@ export class ContentFormComponent {
     this.categories$ = this.categoryService.getAllCategories();
 
     // get error when submit form
-    this.contentService.errorObject$.subscribe({
+    this.errorSubscribtion = this.contentService.httpError$.subscribe({
       next: (err) => (this.error = err),
     });
 
@@ -206,6 +207,10 @@ export class ContentFormComponent {
         resume: this.content.resume,
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.errorSubscribtion?.unsubscribe();
   }
 
   handleSubmit() {
