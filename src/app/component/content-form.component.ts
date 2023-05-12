@@ -9,7 +9,12 @@ import { ContentService } from '../service/content.service';
 @Component({
   selector: 'app-content-form',
   template: `
-    <form class="form" (submit)="handleSubmit()" [formGroup]="contentForm">
+    <form
+      class="form"
+      (submit)="handleSubmit()"
+      [formGroup]="contentForm"
+      enctype="multipart/form-data"
+    >
       <p class="form__error" *ngIf="error['global']">{{ error['global'] }}</p>
       <div class="form__field">
         <label class="form__label" for="title">Title</label>
@@ -90,6 +95,15 @@ import { ContentService } from '../service/content.service';
         />
       </div>
       <div class="form__field">
+        <label for="file">Add image</label>
+        <input
+          type="file"
+          name="file"
+          id="file"
+          (change)="uploadFile($event)"
+        />
+      </div>
+      <div class="form__field">
         <label class="form__label" for="resume">Resume</label>
         <p
           class="form__error"
@@ -160,9 +174,10 @@ import { ContentService } from '../service/content.service';
 })
 export class ContentFormComponent {
   @Input() content: ApiContent | null = null;
-  @Output() onSubmit = new EventEmitter<ContentData>();
+  @Output() onSubmit = new EventEmitter<FormData>();
   error: Record<string, string> = {};
   errorSubscribtion?: Subscription;
+  formData: FormData = new FormData();
 
   contentType = Object.values(ContentType);
 
@@ -209,6 +224,12 @@ export class ContentFormComponent {
     }
   }
 
+  uploadFile(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const file: File = (target.files as FileList)[0];
+    this.formData.append('file', file, file.name);
+  }
+
   ngOnDestroy() {
     this.errorSubscribtion?.unsubscribe();
   }
@@ -219,6 +240,13 @@ export class ContentFormComponent {
       return;
     }
     this.isInvalidForm = false;
-    this.onSubmit.emit(this.contentForm.value as ContentData);
+    Object.keys(this.contentForm.controls).forEach((formControlName) => {
+      if (formControlName === 'file') return;
+      this.formData.append(
+        formControlName,
+        this.contentForm.get(formControlName)?.value
+      );
+    });
+    this.onSubmit.emit(this.formData);
   }
 }

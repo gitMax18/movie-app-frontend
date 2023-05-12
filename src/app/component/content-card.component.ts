@@ -1,5 +1,6 @@
+import { env } from './../../environment/env';
 import { Component, Input } from '@angular/core';
-import { ApiContent } from '../types';
+import { ApiContent, Env } from '../types';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,7 +10,11 @@ import { Router } from '@angular/router';
       <div class="card" (click)="handleNavigation(content.id)">
         <img
           class="card__img"
-          src="../../assets/image/default.jpg"
+          [src]="
+            content.imagePath
+              ? env.base_url + '/contents/image/' + content.imagePath
+              : '../../assets/image/default.jpg'
+          "
           alt="default image"
         />
         <div class="card__infos">
@@ -29,6 +34,7 @@ import { Router } from '@angular/router';
         &__img {
           height: 20rem;
           width: 100%;
+          object-fit: cover;
         }
         &__infos {
           padding: 0.5rem;
@@ -46,6 +52,7 @@ import { Router } from '@angular/router';
 })
 export class ContentCardComponent {
   @Input() content?: ApiContent;
+  env: Env = env;
 
   constructor(private router: Router) {}
 

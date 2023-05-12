@@ -24,6 +24,7 @@ export type ApiContent = {
   resume: string;
   shortResume: string;
   type: ContentType;
+  imagePath: string;
 };
 
 export type ContentData = {
@@ -33,6 +34,7 @@ export type ContentData = {
   resume: string;
   shortResume: string;
   type: ContentType;
+  file: File;
 };
 
 export enum ContentType {
@@ -44,4 +46,8 @@ export enum ContentType {
 export type Category = {
   id: number;
   name: string;
+};
+
+export type Env = {
+  base_url: string;
 };

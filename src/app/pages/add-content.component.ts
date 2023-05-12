@@ -24,7 +24,7 @@ import { Router } from '@angular/router';
 export class AddContentComponent {
   constructor(private contentService: ContentService, private router: Router) {}
 
-  handleSubmit(contentData: ContentData) {
+  handleSubmit(contentData: FormData) {
     this.contentService
       .createContent(contentData)
       .subscribe(() => this.router.navigateByUrl(''));

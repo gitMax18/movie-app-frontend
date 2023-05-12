@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '../service/content.service';
 import { switchMap, Observable, of, catchError, throwError } from 'rxjs';
-import { ApiContent } from '../types';
+import { ApiContent, Env } from '../types';
+import { env } from 'src/environment/env';
 
 @Component({
   selector: 'app-movie-detail',
@@ -10,7 +11,11 @@ import { ApiContent } from '../types';
     <div class="content" *ngIf="content$ | async as content">
       <img
         class="content__img"
-        src="../../assets/image/default.jpg"
+        [src]="
+          content.imagePath
+            ? env.base_url + '/contents/image/' + content.imagePath
+            : '../../assets/image/default.jpg'
+        "
         alt="default"
       />
       <div class="content__infos">
@@ -95,6 +100,7 @@ import { ApiContent } from '../types';
 export class MovieDetailComponent {
   content$?: Observable<ApiContent | null>;
   err$?: Observable<string>;
+  env: Env = env;
 
   constructor(
     private route: ActivatedRoute,

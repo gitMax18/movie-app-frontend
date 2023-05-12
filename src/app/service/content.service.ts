@@ -1,13 +1,18 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiContent, ApiResponse, ContentData } from '../types';
 import { Subject, catchError, map, throwError } from 'rxjs';
+import { env } from 'src/environment/env';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContentService {
-  private readonly contentUrl = 'http://localhost:8080/api/contents';
+  private readonly contentUrl = env.base_url + '/contents';
   private errorObject$ = new Subject<{ [key: string]: string }>();
   httpError$ = this.errorObject$.asObservable();
 
@@ -28,7 +33,7 @@ export class ContentService {
       );
   }
 
-  createContent(newContent: ContentData) {
+  createContent(newContent: FormData) {
     return this.http
       .post<ContentData>(this.contentUrl, newContent)
       .pipe(catchError(this.handleError.bind(this)));
@@ -38,7 +43,7 @@ export class ContentService {
     return this.http.delete(this.contentUrl + `/${contentId}`);
   }
 
-  updateContent(id: number, content: ContentData) {
+  updateContent(id: number, content: FormData) {
     return this.http
       .put(this.contentUrl + `/${id}`, content)
       .pipe(catchError(this.handleError.bind(this)));

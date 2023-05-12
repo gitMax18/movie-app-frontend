@@ -39,7 +39,7 @@ export class UpdateContentComponent {
     );
   }
 
-  handleSubmit(contentData: ContentData) {
+  handleSubmit(contentData: FormData) {
     if (!this.contentId) return;
     this.contentService
       .updateContent(this.contentId, contentData)
