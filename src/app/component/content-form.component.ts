@@ -95,7 +95,7 @@ import { ContentService } from '../service/content.service';
         />
       </div>
       <div class="form__field">
-        <label for="file">Add image</label>
+        <label class="form__label" for="file">Add image</label>
         <input
           type="file"
           name="file"
