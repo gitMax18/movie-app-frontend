@@ -125,52 +125,7 @@ import { ContentService } from '../service/content.service';
       </div>
     </form>
   `,
-  styles: [
-    `
-      .form {
-        width: 100%;
-        &__fields {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 2rem;
-        }
-        &__field {
-          margin-bottom: 1.5rem;
-          width: 100%;
-        }
-        &__label {
-          display: block;
-          color: var(--color-light);
-          font-size: 1.8rem;
-          &--margin {
-            margin-bottom: 0.5rem;
-          }
-        }
-        &__input {
-          display: block;
-          width: 100%;
-          padding: 0.5rem;
-          font-size: 1.8rem;
-        }
-        &__textarea {
-          display: block;
-          width: 100%;
-          padding: 0.5rem;
-          height: 15rem;
-          font-size: 1.8rem;
-        }
-        &__error {
-          color: var(--color-primary);
-        }
-        &__btn {
-          width: 50%;
-          margin: 0 auto;
-          min-width: 50rem;
-        }
-      }
-    `,
-  ],
+  styles: [``],
 })
 export class ContentFormComponent {
   @Input() content: ApiContent | null = null;

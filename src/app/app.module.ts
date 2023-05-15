@@ -16,6 +16,9 @@ import { SelectCategoriesComponent } from './component/select-categories.compone
 import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryBadgeComponent } from './component/category-badge.component';
 import { UpdateContentComponent } from './pages/update-content.component';
+import { LoginComponent } from './pages/login.component';
+import { RegisterComponent } from './pages/register.component';
+import { FormLayoutComponent } from './layout/form-layout.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { UpdateContentComponent } from './pages/update-content.component';
     SelectCategoriesComponent,
     CategoryBadgeComponent,
     UpdateContentComponent,
+    LoginComponent,
+    RegisterComponent,
+    FormLayoutComponent,
   ],
   imports: [
     BrowserModule,

@@ -7,19 +7,12 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-content',
   template: `
-    <div class="addContent">
+    <app-form-layout>
       <app-page-title>Add Content</app-page-title>
       <app-content-form (onSubmit)="handleSubmit($event)"></app-content-form>
-    </div>
+    </app-form-layout>
   `,
-  styles: [
-    `
-      .addContent {
-        max-width: 100rem;
-        margin: 0 auto;
-      }
-    `,
-  ],
+  styles: [],
 })
 export class AddContentComponent {
   constructor(private contentService: ContentService, private router: Router) {}

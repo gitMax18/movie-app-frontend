@@ -13,6 +13,12 @@ import { Component } from '@angular/core';
           <li class="navbar__item">
             <app-navlink path="/content/add">Create content</app-navlink>
           </li>
+          <li class="navbar__item">
+            <app-navlink path="/auth/login">Login</app-navlink>
+          </li>
+          <li class="navbar__item">
+            <app-navlink path="/auth/register">Register</app-navlink>
+          </li>
         </ul>
       </nav>
     </div>
