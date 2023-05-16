@@ -51,3 +51,21 @@ export type Category = {
 export type Env = {
   base_url: string;
 };
+
+export type AuthData = {
+  email: string;
+  password: string;
+};
+
+export type ApiUser = {
+  id: number;
+  email: string;
+  role: string;
+};
+
+export type ApiToken = {
+  exp: number;
+  iat: number;
+  sub: string;
+  user: ApiUser;
+};

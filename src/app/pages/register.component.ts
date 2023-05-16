@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../utils/customValidators';
+import { AuthData } from '../types';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -69,24 +71,31 @@ export class RegisterComponent {
   isInvalidForm = false;
   registerForm = new FormGroup(
     {
-      email: new FormControl<String>('', [
+      email: new FormControl<string>('', [
         Validators.email,
         Validators.required,
       ]),
-      password: new FormControl<String>('', [
+      password: new FormControl<string>('', [
         Validators.min(6),
         Validators.required,
       ]),
-      confirmPassword: new FormControl<String>('', []),
+      confirmPassword: new FormControl<string>('', []),
     },
     [CustomValidators.confirmPassword()]
   );
+
+  constructor(private authService: AuthService) {}
 
   handleSubmit() {
     if (this.registerForm.invalid) {
       this.isInvalidForm = true;
       return;
     }
-    console.log(this.registerForm.value);
+    const authData: AuthData = {
+      email: this.registerForm.controls.email.value!,
+      password: this.registerForm.controls.password.value!,
+    };
+
+    this.authService.register(authData);
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from '../utils/customValidators';
+import { AuthService } from '../service/auth.service';
+import { AuthData } from '../types';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,12 @@ import { CustomValidators } from '../utils/customValidators';
       <form class="form" [formGroup]="loginForm">
         <div class="form__field">
           <label class="form__label" for="email">Email</label>
+          <p
+            class="form__error"
+            *ngIf="loginForm.controls.email.invalid && isInvalidForm"
+          >
+            Email is required
+          </p>
           <input
             formControlName="email"
             class="form__input"
@@ -19,6 +26,12 @@ import { CustomValidators } from '../utils/customValidators';
         </div>
         <div class="form__field">
           <label class="form__label" for="password">Password</label>
+          <p
+            class="form__error"
+            *ngIf="loginForm.controls.password.invalid && isInvalidForm"
+          >
+            Password is required
+          </p>
           <input
             formControlName="password"
             class="form__input"
@@ -37,12 +50,20 @@ import { CustomValidators } from '../utils/customValidators';
   styles: [],
 })
 export class LoginComponent {
+  isInvalidForm = false;
   loginForm = new FormGroup({
-    email: new FormControl<String>(''),
-    password: new FormControl<String>(''),
+    email: new FormControl<string>('', [Validators.required]),
+    password: new FormControl<string>('', [Validators.required]),
   });
 
+  constructor(private authService: AuthService) {}
+
   handleSubmit() {
-    console.log(this.loginForm.value);
+    if (this.loginForm.invalid) {
+      this.isInvalidForm = true;
+      return;
+    }
+    this.isInvalidForm = false;
+    this.authService.login(this.loginForm.value as AuthData);
   }
 }
