@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
 import { AuthData } from '../types';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +10,7 @@ import { AuthData } from '../types';
     <app-form-layout>
       <app-page-title>Login</app-page-title>
       <form class="form" [formGroup]="loginForm">
+        <p *ngIf="error['global']" class="form__error">{{ error['global'] }}</p>
         <div class="form__field">
           <label class="form__label" for="email">Email</label>
           <p
@@ -50,6 +52,8 @@ import { AuthData } from '../types';
   styles: [],
 })
 export class LoginComponent {
+  error: Record<string, string> = {};
+  errorSubsciption?: Subscription;
   isInvalidForm = false;
   loginForm = new FormGroup({
     email: new FormControl<string>('', [Validators.required]),
@@ -57,6 +61,16 @@ export class LoginComponent {
   });
 
   constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.errorSubsciption = this.authService.errorObject$.subscribe(
+      (error) => (this.error = error)
+    );
+  }
+
+  ngOnDestroy() {
+    this.errorSubsciption?.unsubscribe();
+  }
 
   handleSubmit() {
     if (this.loginForm.invalid) {

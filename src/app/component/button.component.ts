@@ -44,10 +44,6 @@ export class ButtonComponent {
   @Input() style: 'primary' | 'danger' | 'success' = 'primary';
   @Output() onClick = new EventEmitter();
 
-  ngOnInit() {
-    console.log(this.type);
-  }
-
   handleClick() {
     this.onClick.emit();
   }

@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { env } from 'src/environment/env';
 import { ApiResponse, ApiToken, ApiUser, AuthData } from '../types';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, Subject, catchError, map, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
 
@@ -12,7 +12,8 @@ import jwtDecode from 'jwt-decode';
 export class AuthService {
   private readonly authUrl = env.base_url + '/auth';
   token: string | null = null;
-
+  private _errorObject$ = new Subject<Record<string, string>>();
+  errorObject$ = this._errorObject$.asObservable();
   private _isAuthenticated$ = new BehaviorSubject(false);
   isAuthenticated$ = this._isAuthenticated$.asObservable();
 
@@ -35,7 +36,10 @@ export class AuthService {
   login(authData: AuthData) {
     this.http
       .post<ApiResponse<string>>(this.authUrl + '/login', authData)
-      .pipe(map((response) => response.data))
+      .pipe(
+        map((response) => response.data),
+        catchError(this.handleError.bind(this))
+      )
       .subscribe({
         next: (token) => this.authenticateUser(token),
       });
@@ -44,7 +48,10 @@ export class AuthService {
   register(authData: AuthData) {
     this.http
       .post<ApiResponse<string>>(this.authUrl + '/register', authData)
-      .pipe(map((response) => response.data))
+      .pipe(
+        map((response) => response.data),
+        catchError(this.handleError.bind(this))
+      )
       .subscribe({
         next: (token) => {
           this.authenticateUser(token);
@@ -79,5 +86,25 @@ export class AuthService {
       return false;
     }
     return true;
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      this._errorObject$.next({
+        global: 'Error occured, please try later',
+      });
+    } else {
+      if (
+        error.error.details !== null &&
+        Object.keys(error.error.details).length > 0
+      ) {
+        this._errorObject$.next(error.error.details);
+      } else {
+        this._errorObject$.next({
+          global: 'Invalid email or password',
+        });
+      }
+    }
+    return throwError(() => error.message);
   }
 }

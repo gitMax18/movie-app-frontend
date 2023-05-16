@@ -29,7 +29,7 @@ export class ContentService {
       .get<ApiResponse<ApiContent>>(this.contentUrl + `/${id}`)
       .pipe(
         map((response) => response.data),
-        catchError(this.handleError)
+        catchError(this.handleError.bind(this))
       );
   }
 

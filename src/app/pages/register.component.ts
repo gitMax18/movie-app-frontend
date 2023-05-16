@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../utils/customValidators';
 import { AuthData } from '../types';
 import { AuthService } from '../service/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -10,6 +11,7 @@ import { AuthService } from '../service/auth.service';
     <app-form-layout>
       <app-page-title>Register</app-page-title>
       <form class="form" [formGroup]="registerForm">
+        <p *ngIf="error['global']" class="form_error">{{ error['global'] }}</p>
         <div class="form__field">
           <label class="form__label" for="email">Email</label>
           <p
@@ -17,6 +19,9 @@ import { AuthService } from '../service/auth.service';
             *ngIf="registerForm.controls.email.invalid && isInvalidForm"
           >
             Must be a valid email
+          </p>
+          <p *ngIf="error['email']" class="form__error">
+            {{ error['email'] }}
           </p>
           <input
             formControlName="email"
@@ -69,6 +74,8 @@ import { AuthService } from '../service/auth.service';
 })
 export class RegisterComponent {
   isInvalidForm = false;
+  error: Record<string, string> = {};
+  errorSubscription$?: Subscription;
   registerForm = new FormGroup(
     {
       email: new FormControl<string>('', [
@@ -85,6 +92,16 @@ export class RegisterComponent {
   );
 
   constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.errorSubscription$ = this.authService.errorObject$.subscribe(
+      (error) => (this.error = error)
+    );
+  }
+
+  ngOnDestroy() {
+    this.errorSubscription$?.unsubscribe();
+  }
 
   handleSubmit() {
     if (this.registerForm.invalid) {
