@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../service/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -11,13 +13,19 @@ import { Component } from '@angular/core';
             <app-navlink path="/">Home</app-navlink>
           </li>
           <li class="navbar__item">
-            <app-navlink path="/content/add">Create content</app-navlink>
+            <app-navlink *appIfAuth="true" path="/content/add"
+              >Create content</app-navlink
+            >
           </li>
           <li class="navbar__item">
-            <app-navlink path="/auth/login">Login</app-navlink>
+            <app-navlink *appIfAuth="false" path="/auth/login"
+              >Login</app-navlink
+            >
           </li>
           <li class="navbar__item">
-            <app-navlink path="/auth/register">Register</app-navlink>
+            <app-navlink *appIfAuth="false" path="/auth/register"
+              >Register</app-navlink
+            >
           </li>
         </ul>
       </nav>

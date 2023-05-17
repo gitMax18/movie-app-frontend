@@ -20,6 +20,7 @@ import { LoginComponent } from './pages/login.component';
 import { RegisterComponent } from './pages/register.component';
 import { FormLayoutComponent } from './layout/form-layout.component';
 import { AuthInterceptor } from './service/auth.interceptor';
+import { IfAuthDirective } from './directive/if-auth.directive';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { AuthInterceptor } from './service/auth.interceptor';
     LoginComponent,
     RegisterComponent,
     FormLayoutComponent,
+    IfAuthDirective,
   ],
   imports: [
     BrowserModule,
