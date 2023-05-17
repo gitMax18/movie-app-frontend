@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '../service/content.service';
-import { switchMap, Observable, of, catchError, throwError } from 'rxjs';
+import { switchMap, Observable, of, catchError, take, map } from 'rxjs';
 import { ApiContent, Env } from '../types';
 import { env } from 'src/environment/env';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-movie-detail',
@@ -33,17 +34,19 @@ import { env } from 'src/environment/env';
           >Type : {{ content.type.toLowerCase() }}</span
         >
         <p class="content__resume">{{ content.resume }}</p>
-        <div class="content__action">Actions</div>
-        <hr class="content__action--row" />
-        <div class="content__actions">
-          <app-button (onClick)="handleDelete(content.id)" [style]="'danger'"
-            >Delete</app-button
-          >
-          <app-button
-            (onClick)="handleClickUpdate(content.id)"
-            [style]="'success'"
-            >Update</app-button
-          >
+        <div *ngIf="loggedUserId === content.userId">
+          <div class="content__action">Actions</div>
+          <hr class="content__action--row" />
+          <div class="content__actions">
+            <app-button (onClick)="handleDelete(content.id)" [style]="'danger'"
+              >Delete</app-button
+            >
+            <app-button
+              (onClick)="handleClickUpdate(content.id)"
+              [style]="'success'"
+              >Update</app-button
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -101,11 +104,13 @@ export class MovieDetailComponent {
   content$?: Observable<ApiContent | null>;
   err$?: Observable<string>;
   env: Env = env;
+  loggedUserId: number | undefined = undefined;
 
   constructor(
     private route: ActivatedRoute,
     private contentService: ContentService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -123,6 +128,13 @@ export class MovieDetailComponent {
         return of(null);
       })
     );
+
+    this.authService.user$
+      .pipe(
+        take(1),
+        map((user) => user?.id)
+      )
+      .subscribe((id) => (this.loggedUserId = id));
   }
 
   handleDelete(id: number) {

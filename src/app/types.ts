@@ -25,6 +25,7 @@ export type ApiContent = {
   shortResume: string;
   type: ContentType;
   imagePath: string;
+  userId: number;
 };
 
 export type ContentData = {
@@ -35,6 +36,7 @@ export type ContentData = {
   shortResume: string;
   type: ContentType;
   file: File;
+  userId: number;
 };
 
 export enum ContentType {

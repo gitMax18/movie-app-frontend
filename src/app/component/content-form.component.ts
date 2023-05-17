@@ -1,10 +1,11 @@
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, map, take, tap } from 'rxjs';
 import { CategoryService } from '../service/category.service';
 import { ApiContent, Category, ContentData, ContentType } from './../types';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../utils/customValidators';
 import { ContentService } from '../service/content.service';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-content-form',
@@ -154,7 +155,8 @@ export class ContentFormComponent {
 
   constructor(
     private categoryService: CategoryService,
-    private contentService: ContentService
+    private contentService: ContentService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -177,6 +179,19 @@ export class ContentFormComponent {
         resume: this.content.resume,
       });
     }
+    // get userid
+    this.authService.user$
+      .pipe(
+        take(1),
+        tap((user) => console.log(user)),
+        map((user) => user?.id.toString())
+      )
+      .subscribe((id) => {
+        console.log('id', id);
+        if (id) {
+          this.formData.append('userId', id);
+        }
+      });
   }
 
   uploadFile(e: Event) {
@@ -202,6 +217,7 @@ export class ContentFormComponent {
         this.contentForm.get(formControlName)?.value
       );
     });
+    this.formData.forEach((field) => console.log(field));
     this.onSubmit.emit(this.formData);
   }
 }

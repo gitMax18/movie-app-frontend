@@ -17,8 +17,8 @@ export class AuthService {
   private _isAuthenticated$ = new BehaviorSubject(false);
   isAuthenticated$ = this._isAuthenticated$.asObservable();
 
-  private _user = new BehaviorSubject<ApiUser | null>(null);
-  user = this._user.asObservable();
+  private _user$ = new BehaviorSubject<ApiUser | null>(null);
+  user$ = this._user$.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
     const token = localStorage.getItem('token');
@@ -27,7 +27,7 @@ export class AuthService {
       console.log('decoded token', decodedToken);
       if (!this.isTokenExpired(decodedToken)) {
         this.token = token;
-        this._user.next(decodedToken.user);
+        this._user$.next(decodedToken.user);
         this._isAuthenticated$.next(true);
       }
     }
@@ -65,7 +65,7 @@ export class AuthService {
       .pipe(map((response) => response.data))
       .subscribe({
         next: (user) => {
-          this._user.next(user);
+          this._user$.next(user);
           this._isAuthenticated$.next(true);
         },
       });
@@ -74,7 +74,7 @@ export class AuthService {
   private authenticateUser(token: string) {
     const decodedToken = jwtDecode(token) as ApiToken;
     this.token = token;
-    this._user.next(decodedToken.user);
+    this._user$.next(decodedToken.user);
     this._isAuthenticated$.next(true);
     localStorage.setItem('token', token);
     this.router.navigateByUrl('/');
