@@ -31,6 +31,7 @@ import { Router } from '@angular/router';
       .card {
         width: 20rem;
         background-color: var(--color-grey-darken);
+        cursor: pointer;
         &__img {
           height: 20rem;
           width: 100%;

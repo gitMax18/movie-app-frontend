@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { ContentService } from '../service/content.service';
-import { ApiError, ContentData } from '../types';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({

@@ -2,6 +2,7 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
+  HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiContent, ApiResponse, ContentData } from '../types';
@@ -18,9 +19,11 @@ export class ContentService {
 
   constructor(private http: HttpClient) {}
 
-  getAllContent() {
+  getAllContent(titleFilter: string) {
+    const options = { params: new HttpParams().set('title', titleFilter) };
+
     return this.http
-      .get<ApiResponse<ApiContent[]>>(this.contentUrl)
+      .get<ApiResponse<ApiContent[]>>(this.contentUrl, options)
       .pipe(map((response) => response.data));
   }
 

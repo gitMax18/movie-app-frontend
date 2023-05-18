@@ -21,6 +21,7 @@ import { RegisterComponent } from './pages/register.component';
 import { FormLayoutComponent } from './layout/form-layout.component';
 import { AuthInterceptor } from './service/auth.interceptor';
 import { IfAuthDirective } from './directive/if-auth.directive';
+import { ContentFilterComponent } from './component/content-filter.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { IfAuthDirective } from './directive/if-auth.directive';
     RegisterComponent,
     FormLayoutComponent,
     IfAuthDirective,
+    ContentFilterComponent,
   ],
   imports: [
     BrowserModule,
